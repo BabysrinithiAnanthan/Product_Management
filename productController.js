@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Product from "../Models/Product.js";
 
-export const creatProduct=async(req,res)=>{
+export const createProduct=async(req,res)=>{
     try{
         const {prodID,prodName,price,stock} = req.body;
 
@@ -15,7 +15,7 @@ export const creatProduct=async(req,res)=>{
     }catch(err){
         res.status(500).json({
             success:false,
-            message:err.message
+            message:"All the Fields are Required"
 
         });
     }
