@@ -1,28 +1,36 @@
 import mongoose from 'mongoose'
 
 const orderSchema = new mongoose.Schema({
-    customerName:{
-        type:String,
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required:true,
     },
-    product:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Product",
+    prodID:{
+     type:String,
+     required:true
+    },
+    prodName:{  
+        type:String,
+        required:true
+    },
+    price:{
+        type:Number,
         required:true
     },
     quantity:{
         type:Number,
         required:true,
-        min:1
+        
     },
     amount:{
         type:Number,
         required:true,
-        min:0
+        
     },
     status:{
         type:String,
-        enum:["Pending","Confirmed","Cancelled","Delivered"],
+        enum:["pending","confirmed","cancelled","delivered"],
         default:"Pending"
     }
 },
