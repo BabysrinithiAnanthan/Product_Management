@@ -1,0 +1,132 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import '../src/Style/reg.css'
+
+function RegisterPage(){
+    const[form,setForm]=useState({
+        userName:"",
+        email:"",
+        password:""
+    });
+
+    const[message,setMessage]=useState("");
+
+    const navigate=useNavigate();
+   
+    const handleChange=(e)=>{
+        setForm({...form,[e.target.name]:e.target.value});
+    }
+
+    const handleSubmit=async(e)=>{
+
+        e.preventDefault();
+
+        try{
+            const response = await fetch("http://localhost:5000/api/auth/register",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(form)
+            });
+        
+
+        const data= await response.json();
+
+        if(!response.ok){
+            setMessage(data.message);
+            return;
+        }
+
+        setMessage("Registration Successful..!!");
+
+        navigate("/login");
+
+        setForm({
+            userName:"",
+            email:"",
+            password:""
+        });
+       }catch(error){
+       setMessage("Server Error",error);
+    }
+};
+    
+return(
+  
+  <div className="register-page">
+
+    <div className="register-card">
+
+      <div className="register-title">
+        <h2>Create Account</h2>
+        <p className="register-subtitle">
+          Register to get started
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="register-form">
+
+        <label>Customer Name</label>
+        <input
+          type="text"
+          placeholder="Enter your sweet name"
+          name="userName"
+          value={form.userName}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Email</label>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="Enter your password here"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+
+        <button
+          type="submit"
+          className="register-button"
+        >
+          Register
+        </button>
+
+        <p className="login-text">
+          Already have an account?{" "}
+
+          <button
+            type="button"
+            className="login-link"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+        </p>
+
+      </form>
+
+      {message && (
+        <h4 className="register-message">
+          {message}
+        </h4>
+      )}
+
+    </div>
+
+  </div>
+);
+}
+export default RegisterPage;
